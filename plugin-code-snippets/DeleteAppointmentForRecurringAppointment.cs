@@ -8,29 +8,29 @@ public void Execute(IServiceProvider serviceProvider)
 
     try
     {
-        if (context.PrimaryEntityName.Equals(RecurringAppointmentMaster.EntityLogicalName, StringComparison.OrdinalIgnoreCase))
-        {
-            if (context.MessageName.Equals("DeleteOpenInstances", 
-                StringComparison.OrdinalIgnoreCase) && context.Stage == 20) // Pre-operation
-            {
-                DeleteFutureAppointments(((Entity)context.InputParameters["Target"]).ToEntity<RecurringAppointmentMaster>().Id, 
-                    (DateTime)context.InputParameters["SeriesEndDate"], 
-                    systemService);
-            }
-            else if (context.MessageName.Equals("AddRecurrence", 
-                StringComparison.OrdinalIgnoreCase) && context.Stage == 10) // Pre-validation
-            {
-                ElevateDeleteAppointmentPermission(context.InitiatingUserId, context.BusinessUnitId, 
-                    (Guid)context.InputParameters["AppointmentId"], 
-                    systemService);
-            }
-            else if (context.MessageName.Equals("AddRecurrence", 
-                StringComparison.OrdinalIgnoreCase) && context.Stage == 40) // Post-operation
-            {
-                RemoveDeleteActivityRole(context.InitiatingUserId, 
-                    systemService);
-            }
-        }
+if (context.PrimaryEntityName.Equals(RecurringAppointmentMaster.EntityLogicalName, StringComparison.OrdinalIgnoreCase))
+{
+    if (context.MessageName.Equals("DeleteOpenInstances", 
+        StringComparison.OrdinalIgnoreCase) && context.Stage == 20) // Pre-operation
+    {
+        DeleteFutureAppointments(((Entity)context.InputParameters["Target"]).ToEntity<RecurringAppointmentMaster>().Id, 
+            (DateTime)context.InputParameters["SeriesEndDate"], 
+            systemService);
+    }
+else if (context.MessageName.Equals("AddRecurrence", 
+    StringComparison.OrdinalIgnoreCase) && context.Stage == 10) // Pre-validation
+{
+    ElevateDeleteAppointmentPermission(context.InitiatingUserId, context.BusinessUnitId, 
+        (Guid)context.InputParameters["AppointmentId"], 
+        systemService);
+}
+else if (context.MessageName.Equals("AddRecurrence", 
+    StringComparison.OrdinalIgnoreCase) && context.Stage == 40) // Post-operation
+{
+    RemoveDeleteActivityRole(context.InitiatingUserId, 
+        systemService);
+}
+}
     }
     catch (System.ServiceModel.FaultException<OrganizationServiceFault> ex)
     {
