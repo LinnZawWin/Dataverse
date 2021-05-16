@@ -1,4 +1,4 @@
-﻿private const string DeleteActivityRoleName = "CS Delete Activity";
+﻿private const string DeleteActivityRoleName = "Delete Activity Role";
 public void Execute(IServiceProvider serviceProvider)
 {
     ITracingService tracer = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
