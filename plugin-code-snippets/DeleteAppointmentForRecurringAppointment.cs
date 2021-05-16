@@ -76,21 +76,6 @@ private void ShareDeleteRights(Guid initiatingUserId, Guid appointmentId, IOrgan
     };
     systemService.Execute(grantAccessRequest);
 }
-private void AssignDeleteActivityRole(Guid initiatingUserId, Guid businessUnitId, IOrganizationService systemService)
-{
-    QueryExpression query = new QueryExpression(Role.EntityLogicalName);
-    query.ColumnSet = new ColumnSet("roleid");
-    query.Criteria.AddCondition(new ConditionExpression("name", ConditionOperator.Equal, DeleteActivityRoleName));
-    query.Criteria.AddCondition(new ConditionExpression("businessunitid", ConditionOperator.Equal, businessUnitId));
-    EntityCollection roles = systemService.RetrieveMultiple(query);
-    if (roles.Entities.Count > 0)
-    {
-        systemService.Associate(SystemUser.EntityLogicalName,
-        initiatingUserId,
-        new Relationship("systemuserroles_association"),
-        new EntityReferenceCollection() { new EntityReference(Role.EntityLogicalName, roles[0].Id) });
-    }
-}
 private bool DoesUserHaveDeletePrivilege(Guid initiatingUserId, Guid appointmentId, IOrganizationService systemService)
 {
     RetrievePrincipalAccessRequest request = new RetrievePrincipalAccessRequest()
@@ -107,6 +92,21 @@ private bool DoesUserHaveDeletePrivilege(Guid initiatingUserId, Guid appointment
         }
     }
     return false;
+}
+private void AssignDeleteActivityRole(Guid initiatingUserId, Guid businessUnitId, IOrganizationService systemService)
+{
+    QueryExpression query = new QueryExpression(Role.EntityLogicalName);
+    query.ColumnSet = new ColumnSet("roleid");
+    query.Criteria.AddCondition(new ConditionExpression("name", ConditionOperator.Equal, DeleteActivityRoleName));
+    query.Criteria.AddCondition(new ConditionExpression("businessunitid", ConditionOperator.Equal, businessUnitId));
+    EntityCollection roles = systemService.RetrieveMultiple(query);
+    if (roles.Entities.Count > 0)
+    {
+        systemService.Associate(SystemUser.EntityLogicalName,
+        initiatingUserId,
+        new Relationship("systemuserroles_association"),
+        new EntityReferenceCollection() { new EntityReference(Role.EntityLogicalName, roles[0].Id) });
+    }
 }
 private void RemoveDeleteActivityRole(Guid initiatingUserId, IOrganizationService systemService)
 {
